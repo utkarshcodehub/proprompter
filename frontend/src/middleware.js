@@ -1,7 +1,8 @@
 import { createServerClient } from "@supabase/ssr";
 import { NextResponse } from "next/server";
 
-const PROTECTED = ["/history", "/collections", "/compare"];
+// Dashboard added — community is public
+const PROTECTED = ["/history", "/collections", "/compare", "/dashboard"];
 
 export async function middleware(request) {
   const { pathname } = request.nextUrl;
@@ -39,5 +40,10 @@ export async function middleware(request) {
 }
 
 export const config = {
-  matcher: ["/history/:path*", "/collections/:path*", "/compare/:path*"],
+  matcher: [
+    "/history/:path*",
+    "/collections/:path*",
+    "/compare/:path*",
+    "/dashboard/:path*",
+  ],
 };
