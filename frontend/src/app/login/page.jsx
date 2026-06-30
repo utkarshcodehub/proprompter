@@ -2,12 +2,11 @@ export const dynamic = 'force-dynamic'
 
 "use client";
 
-
-import { useEffect } from "react";
+import { useEffect, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useAuth } from "@/hooks/useAuth";
 
-export default function LoginPage() {
+function LoginContent() {
   const { user, loading, signInWithGoogle } = useAuth();
   const router       = useRouter();
   const searchParams = useSearchParams();
@@ -44,7 +43,6 @@ export default function LoginPage() {
         position: "relative",
         zIndex: 1,
       }}>
-        {/* Logo */}
         <div style={{
           display: "flex", alignItems: "center",
           justifyContent: "center", gap: "8px", marginBottom: "28px",
@@ -126,5 +124,21 @@ export default function LoginPage() {
         </p>
       </div>
     </div>
+  );
+}
+
+export default function LoginPage() {
+  return (
+    <Suspense fallback={
+      <div style={{
+        minHeight: "100vh", background: "var(--bg)",
+        display: "flex", alignItems: "center", justifyContent: "center",
+        color: "var(--text-secondary)", fontSize: "13px",
+      }}>
+        Loading...
+      </div>
+    }>
+      <LoginContent />
+    </Suspense>
   );
 }
