@@ -101,15 +101,6 @@ NEXT_PUBLIC_SUPABASE_URL        = https://xxx.supabase.co
 NEXT_PUBLIC_SUPABASE_ANON_KEY   = eyJ...
 ```
 
----
-
-## Roadmap
-
-- [x] Phase 1 — Core optimizer, both modes, all four models, auth, deployed
-- [x] Phase 2 — History, collections, compare, dashboard, community templates
-- [ ] Phase 3 — Chrome extension, public API, shareable links, Stripe
-
----
 
 ## License
 
