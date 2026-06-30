@@ -1,0 +1,19 @@
+# Python backend
+__pycache__/
+*.pyc
+*.pyo
+backend/venv/
+backend/.env
+*.egg-info/
+
+# Environment files (root level)
+.env
+.env.local
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Editor
+.idea/
+.vscode/
