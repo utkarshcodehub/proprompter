@@ -10,7 +10,7 @@ import logging
 from groq import Groq, APIError, RateLimitError, APIConnectionError
 
 from app.config import settings
-from app.schemas import OptimizeResult, CompareResult, ModeDelta, TargetModel
+from app.schemas import OptimizeResult, CompareResult, ModeDelta
 
 logger = logging.getLogger(__name__)
 
@@ -99,8 +99,8 @@ OUTPUT — STRICT JSON ONLY. No markdown. No preamble.
 
 {
   "mode": "lean" | "structured",
-  "detected_model": "chatgpt" | "claude" | "midjourney" | "cursor" | "generic",
-  "detected_intent": "create" | "explain" | "fix" | "analyze" | "transform" | "brainstorm",
+    "detected_model": "chatgpt",
+    "detected_intent": "create",
   "gap_analysis": {
     "missing":   ["what was genuinely absent"],
     "redundant": ["what was stripped"]
@@ -108,15 +108,76 @@ OUTPUT — STRICT JSON ONLY. No markdown. No preamble.
   "optimized_prompt": "the full ready-to-use prompt",
   "explanation": "1-2 sentences: what changed and why",
   "changes_made": [
-    { "type": "added|stripped|restructured|specified|reframed", "detail": "what changed" }
+    { "type": "added", "detail": "what changed" }
   ],
-  "token_estimate_before": <int>,
-  "token_estimate_after": <int>,
-  "tokens_delta": <int>,
-  "quality_score": <int 0-100>,
+  "token_estimate_before": 10,
+  "token_estimate_after": 12,
+  "tokens_delta": 2,
+  "quality_score": 85,
   "mode_insight": "one sentence on what the other mode would do differently"
 }
 """
+
+OPTIMIZE_RESPONSE_SCHEMA = {
+    "type": "object",
+    "additionalProperties": False,
+    "properties": {
+        "mode": {"type": "string", "enum": ["lean", "structured"]},
+        "detected_model": {
+            "type": "string",
+            "enum": ["auto", "chatgpt", "claude", "midjourney", "cursor"],
+        },
+        "detected_intent": {
+            "type": "string",
+            "enum": ["create", "explain", "fix", "analyze", "transform", "brainstorm"],
+        },
+        "gap_analysis": {
+            "type": "object",
+            "additionalProperties": False,
+            "properties": {
+                "missing": {"type": "array", "items": {"type": "string"}},
+                "redundant": {"type": "array", "items": {"type": "string"}},
+            },
+            "required": ["missing", "redundant"],
+        },
+        "optimized_prompt": {"type": "string"},
+        "explanation": {"type": "string"},
+        "changes_made": {
+            "type": "array",
+            "items": {
+                "type": "object",
+                "additionalProperties": False,
+                "properties": {
+                    "type": {
+                        "type": "string",
+                        "enum": ["added", "stripped", "restructured", "specified", "reframed"],
+                    },
+                    "detail": {"type": "string"},
+                },
+                "required": ["type", "detail"],
+            },
+        },
+        "token_estimate_before": {"type": "integer"},
+        "token_estimate_after": {"type": "integer"},
+        "tokens_delta": {"type": "integer"},
+        "quality_score": {"type": "integer", "minimum": 0, "maximum": 100},
+        "mode_insight": {"type": "string"},
+    },
+    "required": [
+        "mode",
+        "detected_model",
+        "detected_intent",
+        "gap_analysis",
+        "optimized_prompt",
+        "explanation",
+        "changes_made",
+        "token_estimate_before",
+        "token_estimate_after",
+        "tokens_delta",
+        "quality_score",
+        "mode_insight",
+    ],
+}
 
 
 def _build_user_message(raw_input: str, mode: str, model: str) -> str:
@@ -148,7 +209,14 @@ def _call_groq(raw_input: str, mode: str, model: str) -> dict:
             ],
             temperature=settings.GROQ_TEMPERATURE,
             max_tokens=settings.GROQ_MAX_TOKENS,
-            response_format={"type": "json_object"},
+            response_format={
+                "type": "json_schema",
+                "json_schema": {
+                    "name": "prompt_optimization",
+                    "strict": True,
+                    "schema": OPTIMIZE_RESPONSE_SCHEMA,
+                },
+            },
         )
 
         raw_json = response.choices[0].message.content

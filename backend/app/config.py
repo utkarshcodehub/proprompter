@@ -17,9 +17,9 @@ class Settings(BaseSettings):
 
     # ── Groq ─────────────────────────────────────────────────
     GROQ_API_KEY: str                   # Required — no default
-    GROQ_MODEL: str = "llama-3.3-70b-versatile"
+    GROQ_MODEL: str = "openai/gpt-oss-120b"
     GROQ_TEMPERATURE: float = 0.2
-    GROQ_MAX_TOKENS: int = 1000
+    GROQ_MAX_TOKENS: int = 16000
 
     # ── Rate limiting ────────────────────────────────────────
     # Free tier: 10 optimizations/day | Compare: 3/day
@@ -30,7 +30,10 @@ class Settings(BaseSettings):
     PRO_COMPARE_LIMIT: int = 9999
 
     # ── CORS ─────────────────────────────────────────────────
-    CORS_ORIGINS: List[str] = ["http://localhost:3000"]
+    CORS_ORIGINS: List[str] = [
+        "http://localhost:3000",
+        "http://127.0.0.1:3000",
+    ]
 
     # ── Supabase (Phase 2 — auth + history) ─────────────────
     SUPABASE_URL: str = ""

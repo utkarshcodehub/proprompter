@@ -118,6 +118,12 @@ async def compare(request: Request, body: CompareRequest) -> CompareResult:
         status, message = error_map.get(str(e), (500, "Unexpected error."))
         raise HTTPException(status_code=status, detail={"code": str(e), "message": message})
 
+    except ValueError as e:
+        raise HTTPException(
+            status_code=502,
+            detail={"code": "malformed_response", "message": "Engine returned invalid JSON.", "hint": str(e)},
+        )
+
     except Exception as e:
         logger.error(f"Unexpected error in /compare: {e}", exc_info=True)
         raise HTTPException(status_code=500, detail={"code": "internal_error", "message": "Something went wrong."})
