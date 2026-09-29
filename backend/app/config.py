@@ -20,6 +20,7 @@ class Settings(BaseSettings):
     GROQ_MODEL: str = "openai/gpt-oss-120b"
     GROQ_TEMPERATURE: float = 0.2
     GROQ_MAX_TOKENS: int = 16000
+    GROQ_REASONING_EFFORT: str = "low"   # gpt-oss: low | medium | high — reasoning tokens count toward TPM
 
     # ── Rate limiting ────────────────────────────────────────
     # Free tier: 10 optimizations/day | Compare: 3/day

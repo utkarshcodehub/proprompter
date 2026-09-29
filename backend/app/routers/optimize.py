@@ -20,7 +20,7 @@ from app.schemas import (
 from app.services.groq_service import run_optimize, run_compare
 from app.middleware.rate_limiter import check_rate_limit, get_usage
 
-logger = APIRouter()
+logger = logging.getLogger(__name__)
 router = APIRouter(tags=["Optimization"])
 
 
