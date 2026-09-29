@@ -6,6 +6,7 @@ import { useAuth } from "@/hooks/useAuth";
 import { useCollections } from "@/hooks/useCollections";
 import { supabase } from "@/lib/supabase";
 import Navbar from "@/components/Navbar";
+import MicButton from "@/components/MicButton";
 
 const MODEL_COLORS = {
   chatgpt: "#5B8FF9", claude: "#9B7FF4",
@@ -65,7 +66,10 @@ function SubmitModal({ onClose, onSubmit, user }) {
         ))}
 
         <div style={{ marginBottom: "14px" }}>
-          <div style={{ fontSize: "11px", color: "var(--text-tertiary)", fontFamily: "var(--font-display)", fontWeight: 600, textTransform: "uppercase", letterSpacing: ".06em", marginBottom: "6px" }}>Prompt</div>
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "6px" }}>
+            <div style={{ fontSize: "11px", color: "var(--text-tertiary)", fontFamily: "var(--font-display)", fontWeight: 600, textTransform: "uppercase", letterSpacing: ".06em" }}>Prompt</div>
+            <MicButton value={prompt} onChange={setPrompt} disabled={loading} />
+          </div>
           <textarea value={prompt} onChange={e => setPrompt(e.target.value)} placeholder="Paste your optimized prompt here..." rows={4}
             style={{ width: "100%", padding: "10px 12px", background: "var(--bg)", border: "1px solid var(--border)", borderRadius: "9px", color: "var(--text-primary)", fontSize: "12.5px", fontFamily: "var(--font-mono)", outline: "none", resize: "vertical", lineHeight: 1.6 }} />
         </div>

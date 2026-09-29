@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useAuth } from "@/hooks/useAuth";
 import { useHistory } from "@/hooks/useHistory";
 import Navbar from "@/components/Navbar";
+import MicButton from "@/components/MicButton";
 
 const MODEL_COLORS = {
   auto: "#888580", chatgpt: "#5B8FF9", claude: "#9B7FF4",
@@ -185,6 +186,7 @@ export default function ComparePage() {
               ))}
             </div>
             <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
+              <MicButton value={input} onChange={setInput} disabled={loading} />
               <span style={{ fontSize: "11px", color: "var(--text-tertiary)" }}>⌘↵</span>
               <button onClick={handleCompare} disabled={!input.trim() || loading} style={{
                 padding: "8px 20px",
