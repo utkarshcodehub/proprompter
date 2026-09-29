@@ -4,6 +4,7 @@ import { useState, useRef } from "react";
 import Link from "next/link";
 import { useAuth } from "@/hooks/useAuth";
 import { useHistory } from "@/hooks/useHistory";
+import MicButton from "@/components/MicButton";
 
 const IconCopy  = () => <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>;
 const IconCheck = () => <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><polyline points="20 6 9 17 4 12"/></svg>;
@@ -348,6 +349,7 @@ export default function Home() {
               </div>
             </div>
             <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
+              <MicButton value={input} onChange={setInput} disabled={loading} />
               <span style={{ fontSize: "11px", color: "var(--text-tertiary)" }}>⌘↵</span>
               <button onClick={handleOptimize} disabled={!input.trim() || loading} style={{
                 display: "flex", alignItems: "center", gap: "6px",

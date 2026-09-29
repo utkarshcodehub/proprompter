@@ -94,7 +94,10 @@ class CompareRequest(BaseModel):
     @field_validator("input")
     @classmethod
     def strip_and_validate(cls, v: str) -> str:
-        return v.strip()
+        v = v.strip()
+        if not v:
+            raise ValueError("Input cannot be empty or whitespace only")
+        return v
 
 
 # ── Response Models ───────────────────────────────────────────
